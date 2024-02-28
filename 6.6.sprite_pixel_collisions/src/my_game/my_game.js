@@ -51,10 +51,17 @@ class MyGame extends engine.Scene {
         this.mCamera = new engine.Camera(
             vec2.fromValues(50, 37.5), // position of the camera
             100,                       // width of camera
-            [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
+            [0, 0, 400, 400]           // viewport (orgX, orgY, width, height)
         );
+        this.mPlaybackCamera = new engine.Camera(
+            vec2.fromValues(50, 37.5), // position of the camera
+            100,                       // width of camera
+            [400, 0, 400, 480]           // viewport (orgX, orgY, width, height)
+        )
         this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray
+        this.mPlaybackCamera.setBackgroundColor([0.5, 0.5, 0.5, 1]);
+        // sets the background to darker grey
 
         this.mBrain = new Brain(this.kMinionSprite);
 
