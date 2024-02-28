@@ -175,10 +175,18 @@ function deepCopy(obj) {
         for (let i = 0; i < obj.length; i++) {
             copy[i] = deepCopy(obj[i]);
         }
+    } else if (obj instanceof Date) {
+        copy = new Date(obj);
+    } else if (obj instanceof RegExp) {
+        copy = new RegExp(obj);
     } else {
         copy = {};
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
+                if (typeof obj[key] === 'function') {
+                    // Skip functions
+                    continue;
+                }
                 copy[key] = deepCopy(obj[key]);
             }
         }
