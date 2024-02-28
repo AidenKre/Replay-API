@@ -55,7 +55,7 @@ class MyGame extends engine.Scene {
         // sets the background to gray
 
         this.mBrain = new Brain(this.kMinionSprite);
-        this.mBrain2 = {...this.mBrain};
+        this.mBrain2 = deepCopy(this.mBrain);
         this.mBrain2.getXform().setPosition(10,10);
 
         // Step D: Create the hero object with texture from the lower-left corner 
@@ -161,4 +161,26 @@ window.onload = function () {
 
     let myGame = new MyGame();
     myGame.start();
+}
+
+function deepCopy(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+        return obj; // Return primitive types and null as is
+    }
+
+    let copy;
+    if (Array.isArray(obj)) {
+        copy = [];
+        for (let i = 0; i < obj.length; i++) {
+            copy[i] = deepCopy(obj[i]);
+        }
+    } else {
+        copy = {};
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                copy[key] = deepCopy(obj[key]);
+            }
+        }
+    }
+    return copy;
 }
