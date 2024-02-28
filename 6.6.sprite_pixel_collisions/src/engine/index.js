@@ -35,7 +35,11 @@ import { eAnimationType } from "./renderables/sprite_animate_renderable.js";
 
 // game objects
 import GameObject from "./game_objects/game_object.js";
+import GameObjectRenderable from "./game_objects/game_object_recordable.js";
 import GameObjectSet from "./game_objects/game_object_set.js";
+
+//recording api
+import RecorderManager from "./recorder_manager.js";
 
 // local to this file only
 import * as glSys from "./core/gl.js";
@@ -84,10 +88,13 @@ export default {
     Renderable, TextureRenderable, SpriteRenderable, SpriteAnimateRenderable, FontRenderable,
 
     // Game Objects
-    GameObject, GameObjectSet,
+    GameObject, GameObjectRenderable, GameObjectSet,
 
     // constants
     eTexCoordArrayIndex, eAnimationType, eBoundCollideStatus,
+
+    //recording api
+    RecorderManager,
 
     // functions
     init, cleanUp, clearCanvas

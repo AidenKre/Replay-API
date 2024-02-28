@@ -32,6 +32,8 @@ class MyGame extends engine.Scene {
 
         this.mCollide = null;
         this.mChoice = 'H';
+
+        this.mRecorderManager = null;
     }
 
     load() {
@@ -55,9 +57,6 @@ class MyGame extends engine.Scene {
         // sets the background to gray
 
         this.mBrain = new Brain(this.kMinionSprite);
-        this.mBrain2 = new this.mBrain;
-        this.mBrain2 = deepCopy(this.mBrain);
-        this.mBrain2.getXform().setPosition(10,10);
 
         // Step D: Create the hero object with texture from the lower-left corner 
         this.mHero = new Hero(this.kMinionSprite);
@@ -78,6 +77,7 @@ class MyGame extends engine.Scene {
         this.mMsg.setTextHeight(3);
 
         this.mCollide = this.mHero;
+        this.mRecorderManager = new engine.RecorderManager(this.mHero)
     }
 
     // This is the draw function, make sure to setup proper drawing environment, and more
@@ -98,7 +98,6 @@ class MyGame extends engine.Scene {
         this.mPortalHit.draw(this.mCamera);
         this.mHeroHit.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
-        this.mBrain2.draw(this.mCamera);
     }
 
     // The update function, updates the application state. Make sure to _NOT_ draw
@@ -108,7 +107,7 @@ class MyGame extends engine.Scene {
 
         this.mLMinion.update();
         this.mRMinion.update();
-
+        this.mRecorderManager.update();
         this.mHero.update();
 
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
@@ -147,12 +146,20 @@ class MyGame extends engine.Scene {
         if (engine.input.isKeyClicked(engine.input.keys.B)) {
             this.mCollide = this.mBrain;
             this.mChoice = 'B';
+            this.mRecorderManager.printarray();
         }
         if (engine.input.isKeyClicked(engine.input.keys.H)) {
             this.mCollide = this.mHero;
             this.mChoice = 'H';
         }
-
+        if (engine.input.isKeyClicked(engine.input.keys.O))
+        {
+            this.mRecorderManager.start();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.P))
+        {
+            this.mRecorderManager.stop();
+        }
         this.mMsg.setText(msg + this.mChoice);
     }
 }
