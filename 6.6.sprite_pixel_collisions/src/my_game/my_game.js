@@ -55,6 +55,7 @@ class MyGame extends engine.Scene {
         // sets the background to gray
 
         this.mBrain = new Brain(this.kMinionSprite);
+        this.mBrain2 = new this.mBrain;
         this.mBrain2 = deepCopy(this.mBrain);
         this.mBrain2.getXform().setPosition(10,10);
 
