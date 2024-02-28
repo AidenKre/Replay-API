@@ -55,6 +55,8 @@ class MyGame extends engine.Scene {
         // sets the background to gray
 
         this.mBrain = new Brain(this.kMinionSprite);
+        this.mBrain2 = {...this.mBrain};
+        this.mBrain2.getXform().setPosition(10,10);
 
         // Step D: Create the hero object with texture from the lower-left corner 
         this.mHero = new Hero(this.kMinionSprite);
@@ -95,6 +97,7 @@ class MyGame extends engine.Scene {
         this.mPortalHit.draw(this.mCamera);
         this.mHeroHit.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
+        this.mBrain2.draw(this.mCamera);
     }
 
     // The update function, updates the application state. Make sure to _NOT_ draw
