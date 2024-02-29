@@ -31,9 +31,12 @@ class MyGame extends engine.Scene {
         this.mRMinion = null;
 
         this.mCollide = null;
+
         this.mChoice = 'H';
 
         this.mRecorderManager = null;
+        this.mPlaybackManager = null;
+        this.mRecordingSet = null;
     }
 
     load() {
@@ -84,7 +87,18 @@ class MyGame extends engine.Scene {
         this.mMsg.setTextHeight(3);
 
         this.mCollide = this.mHero;
-        this.mRecorderManager = new engine.RecorderManager(this.mHero)
+
+        this.mRecordingSet = new engine.GameObjectSet();
+        this.mRecordingSet.addToSet(this.mHero);
+        this.mRecordingSet.addToSet(this.mBrain);
+        this.mRecordingSet.addToSet(this.mLMinion);
+        this.mRecordingSet.addToSet(this.mLMinion);
+        this.mRecordingSet.addToSet(this.mLMinion);
+        this.mRecordingSet.addToSet(this.mPortal);
+        
+        this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
+        this.mRecorderManager.init();
+        this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
     }
 
     // This is the draw function, make sure to setup proper drawing environment, and more
@@ -105,20 +119,21 @@ class MyGame extends engine.Scene {
         this.mPortalHit.draw(this.mCamera);
         this.mHeroHit.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
+        this.mPlaybackManager.draw(this.mCamera);
     }
 
     // The update function, updates the application state. Make sure to _NOT_ draw
     // anything from this function!
     update() {
         let msg = "L/R: Left or Right Minion; H: Dye; B: Brain]: ";
-
+        this.mPlaybackManager.update();
         this.mLMinion.update();
         this.mRMinion.update();
         this.mRecorderManager.update();
         this.mHero.update();
 
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
-            engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.P);
+            engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
         let h = [];
 
@@ -167,6 +182,14 @@ class MyGame extends engine.Scene {
         {
             this.mRecorderManager.stop();
         }
+        if (engine.input.isKeyClicked(engine.input.keys.U))
+        {
+            this.mPlaybackManager.play();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.I))
+        {
+            //this.mRecorderManager.stop();
+        }
         this.mMsg.setText(msg + this.mChoice);
     }
 }
@@ -176,34 +199,4 @@ window.onload = function () {
 
     let myGame = new MyGame();
     myGame.start();
-}
-
-function deepCopy(obj) {
-    if (typeof obj !== 'object' || obj === null) {
-        return obj; // Return primitive types and null as is
-    }
-
-    let copy;
-    if (Array.isArray(obj)) {
-        copy = [];
-        for (let i = 0; i < obj.length; i++) {
-            copy[i] = deepCopy(obj[i]);
-        }
-    } else if (obj instanceof Date) {
-        copy = new Date(obj);
-    } else if (obj instanceof RegExp) {
-        copy = new RegExp(obj);
-    } else {
-        copy = {};
-        for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                if (typeof obj[key] === 'function') {
-                    // Skip functions
-                    continue;
-                }
-                copy[key] = deepCopy(obj[key]);
-            }
-        }
-    }
-    return copy;
 }

@@ -40,6 +40,7 @@ import GameObjectSet from "./game_objects/game_object_set.js";
 
 //recording api
 import RecorderManager from "./recorder_manager.js";
+import PlaybackManager from "./playback_manager.js";
 
 // local to this file only
 import * as glSys from "./core/gl.js";
@@ -94,7 +95,7 @@ export default {
     eTexCoordArrayIndex, eAnimationType, eBoundCollideStatus,
 
     //recording api
-    RecorderManager,
+    RecorderManager, PlaybackManager,
 
     // functions
     init, cleanUp, clearCanvas

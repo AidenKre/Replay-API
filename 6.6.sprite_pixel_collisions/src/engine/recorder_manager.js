@@ -1,15 +1,31 @@
 class RecorderManager
 {
-    constructor(GameObject)
+    constructor(GameObjectSet)
     {
-        this.mGameObject = GameObject;
+        this.mGameObjectSet = GameObjectSet;
         this.mRecording = [];
         this.mIsRecording = false;
     }
 
+    init()
+    {
+        for(let i = 0; i < this.mGameObjectSet.size(); i++)
+        {
+            this.mRecording[i] = [];
+        }   
+    }
+
     update()
     {
-        if(this.mIsRecording) this.mRecording.push(this.mGameObject.serialize());
+        if(this.mIsRecording) 
+        {
+        let frameList = [];
+        for(let i = 0; i < this.mGameObjectSet.size(); i++)
+        {
+            frameList.push(this.mGameObjectSet.getObjectAt(i).serialize());
+        }
+        this.mRecording.push(frameList);
+        }
     }
 
     start()
@@ -23,7 +39,22 @@ class RecorderManager
         this.mIsRecording = false;
     }
 
-    printarray()
+    getRecording()
+    {
+        return this.mRecording;
+    }
+    
+    getLength()
+    {
+        return this.mRecording.length;
+    }
+
+    getGameObjectSet()
+    {
+        return this.mGameObjectSet;
+    }
+
+    printArray()
     {
         console.log(this.mRecording);
     }

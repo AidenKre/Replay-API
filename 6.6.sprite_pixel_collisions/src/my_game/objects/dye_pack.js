@@ -3,7 +3,7 @@
 
 import engine from "../../engine/index.js";
 
-class DyePack extends engine.GameObject {
+class DyePack extends engine.GameObjectRenderable {
     constructor(spriteTexture) {
         super(null);
         this.kRefWidth = 80;
