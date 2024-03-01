@@ -31,7 +31,12 @@ class MyGame extends engine.Scene {
         this.mRMinion = null;
 
         this.mCollide = null;
+
         this.mChoice = 'H';
+
+        this.mRecorderManager = null;
+        this.mPlaybackManager = null;
+        this.mRecordingSet = null;
     }
 
     load() {
@@ -49,10 +54,17 @@ class MyGame extends engine.Scene {
         this.mCamera = new engine.Camera(
             vec2.fromValues(50, 37.5), // position of the camera
             100,                       // width of camera
-            [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
+            [0, 0, 400, 400]           // viewport (orgX, orgY, width, height)
         );
+        this.mPlaybackCamera = new engine.Camera(
+            vec2.fromValues(50, 37.5), // position of the camera
+            100,                       // width of camera
+            [400, 0, 400, 480]           // viewport (orgX, orgY, width, height)
+        )
         this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray
+        this.mPlaybackCamera.setBackgroundColor([0.5, 0.5, 0.5, 1]);
+        // sets the background to darker grey
 
         this.mBrain = new Brain(this.kMinionSprite);
 
@@ -75,6 +87,18 @@ class MyGame extends engine.Scene {
         this.mMsg.setTextHeight(3);
 
         this.mCollide = this.mHero;
+
+        this.mRecordingSet = new engine.GameObjectSet();
+        this.mRecordingSet.addToSet(this.mHero);
+        this.mRecordingSet.addToSet(this.mBrain);
+        this.mRecordingSet.addToSet(this.mLMinion);
+        this.mRecordingSet.addToSet(this.mLMinion);
+        this.mRecordingSet.addToSet(this.mLMinion);
+        this.mRecordingSet.addToSet(this.mPortal);
+        
+        this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
+        this.mRecorderManager.init();
+        this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
     }
 
     // This is the draw function, make sure to setup proper drawing environment, and more
@@ -95,20 +119,21 @@ class MyGame extends engine.Scene {
         this.mPortalHit.draw(this.mCamera);
         this.mHeroHit.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
+        this.mPlaybackManager.draw(this.mCamera);
     }
 
     // The update function, updates the application state. Make sure to _NOT_ draw
     // anything from this function!
     update() {
         let msg = "L/R: Left or Right Minion; H: Dye; B: Brain]: ";
-
+        this.mPlaybackManager.update();
         this.mLMinion.update();
         this.mRMinion.update();
-
+        this.mRecorderManager.update();
         this.mHero.update();
 
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
-            engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.P);
+            engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
         let h = [];
 
@@ -143,12 +168,28 @@ class MyGame extends engine.Scene {
         if (engine.input.isKeyClicked(engine.input.keys.B)) {
             this.mCollide = this.mBrain;
             this.mChoice = 'B';
+            this.mRecorderManager.printarray();
         }
         if (engine.input.isKeyClicked(engine.input.keys.H)) {
             this.mCollide = this.mHero;
             this.mChoice = 'H';
         }
-
+        if (engine.input.isKeyClicked(engine.input.keys.O))
+        {
+            this.mRecorderManager.start();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.P))
+        {
+            this.mRecorderManager.stop();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.U))
+        {
+            this.mPlaybackManager.play();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.I))
+        {
+            //this.mRecorderManager.stop();
+        }
         this.mMsg.setText(msg + this.mChoice);
     }
 }
