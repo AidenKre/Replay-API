@@ -14,6 +14,9 @@ class MyGame extends engine.Scene {
         super();
         this.kMinionSprite = "assets/minion_sprite.png";
         this.kMinionPortal = "assets/minion_portal.png";
+        this.kGrassSprite = "assets/grass.png";
+        this.kLavaSprite = "assets/lava.png";
+        this.kCloudSprite = "assets/cloud.png";
 
 
         // The camera to view the scene
@@ -47,11 +50,17 @@ class MyGame extends engine.Scene {
     load() {
         engine.texture.load(this.kMinionSprite);
         engine.texture.load(this.kMinionPortal);
+        engine.texture.load(this.kGrassSprite);
+        engine.texture.load(this.kLavaSprite);
+        engine.texture.load(this.kCloudSprite);
     }
 
     unload() {
         engine.texture.unload(this.kMinionSprite);
         engine.texture.unload(this.kMinionPortal);
+        engine.texture.unload(this.kGrassSprite);
+        engine.texture.unload(this.kLavaSprite);
+        engine.texture.unload(this.kCloudSprite);
     }
 
     init() {
@@ -77,6 +86,12 @@ class MyGame extends engine.Scene {
         this.mHero = new Hero(this.kMinionSprite);
 
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
+
+        this.mGrassOne = new TextureObject(this.kGrassSprite, 20, -15, 45, 30);
+        this.mGrassTwo = new TextureObject(this.kGrassSprite, 80, -5, 45, 30);
+        this.mLavaOne = new TextureObject(this.kLavaSprite, 50, -30, 50, 50);
+        this.mCloudOne = new TextureObject(this.kCloudSprite, 20, 60, 80, 80);
+        this.mCloudTwo = new TextureObject(this.kCloudSprite, 70, 70, 50, 50);
 /*
         this.mPortalHit = new DyePack(this.kMinionSprite);
         this.mPortalHit.setVisibility(false);
@@ -90,7 +105,7 @@ class MyGame extends engine.Scene {
 */
         this.mMsg = new engine.FontRenderable("Status Message");
         this.mMsg.setColor([0, 0, 0, 1]);
-        this.mMsg.getXform().setPosition(1, 2);
+        this.mMsg.getXform().setPosition(15, 85);
         this.mMsg.setTextHeight(2);
 
         //this.mCollide = this.mHero;
@@ -119,11 +134,19 @@ class MyGame extends engine.Scene {
         this.mCamera.setViewAndCameraMatrix();
 
         // Step  C: Draw everything
+        this.mCloudOne.draw(this.mCamera);
+        this.mCloudTwo.draw(this.mCamera);
+        this.mLavaOne.draw(this.mCamera);
+        this.mGrassOne.draw(this.mCamera);
+        this.mGrassTwo.draw(this.mCamera);
+
         this.mHero.draw(this.mCamera);
         this.mBrain.draw(this.mCamera);
         this.mPortal.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
         this.mPlaybackManager.draw(this.mCamera);
+
+        
     }
 
     update() {
