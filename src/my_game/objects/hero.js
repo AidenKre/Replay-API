@@ -33,9 +33,8 @@ class Hero extends engine.GameObjectRenderable {
 
     serialize()
     {
-        let x = super.serialize();
         return {
-            xform: x,
+            xform: super.serialize(),
             color: [1,1,1,0]
         }
     }
@@ -43,6 +42,7 @@ class Hero extends engine.GameObjectRenderable {
     deserialize(data)
     {
         super.deserialize(data.xform);
+        console.log(data.color);
     }
 }
 
