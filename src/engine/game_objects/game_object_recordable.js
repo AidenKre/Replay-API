@@ -6,12 +6,14 @@ class GameObjectRecordable extends GameObject
     {
         let x = this.getXform().getPosition()[0];
         let y = this.getXform().getPosition()[1];
-        return [x,y];
+        return {
+            pos: [x,y]
+        }
     }
 
     deserialize(data)
     {
-        this.getXform().setPosition(data[0], data[1]);
+        this.getXform().setPosition(data.pos[0], data.pos[1]);
     }
 }
 
