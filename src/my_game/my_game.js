@@ -96,6 +96,7 @@ class MyGame extends engine.Scene {
         this.mRecordingSet.addToSet(this.mLMinion);
         this.mRecordingSet.addToSet(this.mPortal);
         
+        console.log(this.mHero.serialize());
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
         this.mRecorderManager.init();
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
