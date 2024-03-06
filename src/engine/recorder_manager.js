@@ -30,6 +30,11 @@ class RecorderManager
 
     start()
     {
+        if(this.mIsRecording)
+        {
+            console.log("Cannot start a new recording while recording.");
+            return;
+        }
         this.mIsRecording = true;
         this.mRecording = [];
     }
@@ -42,6 +47,19 @@ class RecorderManager
     getRecording()
     {
         return this.mRecording;
+    }
+
+    saveToJSON()
+    {
+        //https://stackoverflow.com/questions/34156282/how-do-i-save-json-to-local-text-file
+        function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+        }
+        download(JSON.stringify(this.mRecording), "json.txt", 'text/plain');
     }
     
     getLength()

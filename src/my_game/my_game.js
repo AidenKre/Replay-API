@@ -14,6 +14,7 @@ class MyGame extends engine.Scene {
         super();
         this.kMinionSprite = "assets/minion_sprite.png";
         this.kMinionPortal = "assets/minion_portal.png";
+        this.kJSONRecording = "src/my_game/recordings/sample.json";
 
         // The camera to view the scene
         this.mCamera = null;
@@ -42,11 +43,13 @@ class MyGame extends engine.Scene {
     load() {
         engine.texture.load(this.kMinionSprite);
         engine.texture.load(this.kMinionPortal);
+        engine.json.load(this.kJSONRecording);
     }
 
     unload() {
         engine.texture.unload(this.kMinionSprite);
         engine.texture.unload(this.kMinionPortal);
+        engine.json.unload(this.kJSONRecording);
     }
 
     init() {
@@ -96,6 +99,7 @@ class MyGame extends engine.Scene {
         this.mRecordingSet.addToSet(this.mLMinion);
         this.mRecordingSet.addToSet(this.mPortal);
         
+        console.log(this.mHero.serialize());
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
         this.mRecorderManager.init();
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
@@ -188,7 +192,7 @@ class MyGame extends engine.Scene {
         }
         if (engine.input.isKeyClicked(engine.input.keys.I))
         {
-            //this.mRecorderManager.stop();
+            this.mPlaybackManager.loadFromJSON(this.kJSONRecording);
         }
         this.mMsg.setText(msg + this.mChoice);
     }

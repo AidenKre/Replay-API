@@ -30,6 +30,20 @@ class Hero extends engine.GameObjectRenderable {
             xform.incXPosBy(this.kDelta);
         }
     }
+
+    serialize()
+    {
+        return {
+            xform: super.serialize(),
+            color: [1,1,1,0]
+        }
+    }
+
+    deserialize(data)
+    {
+        super.deserialize(data.xform);
+        console.log(data.color);
+    }
 }
 
 export default Hero;
