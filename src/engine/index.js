@@ -14,6 +14,7 @@ import * as text from "./resources/text.js";
 import * as xml from "./resources/xml.js";
 import * as texture from "./resources/texture.js";
 import * as font from "./resources/font.js";
+import * as json from "./resources/json.js";
 import * as defaultResources from "./resources/default_resources.js";
 
 // general utilities
@@ -77,7 +78,7 @@ function clearCanvas(color) {
 
 export default {
     // resource support
-    audio, text, xml, texture, font, defaultResources,
+    audio, text, xml, texture, font, json, defaultResources,
 
     // input support
     input,

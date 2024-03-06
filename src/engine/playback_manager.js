@@ -43,6 +43,10 @@ class PlaybackManager
         if(this.mIsPlaying) this.mGameObjectSet.draw(Camera);
     }
 
+    loadFromJSON(filepath)
+    {
+        this.mRecording = JSON.parse(filepath);
+    }
 
 }
 
