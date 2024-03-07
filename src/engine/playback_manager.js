@@ -1,58 +1,80 @@
 import engine from "./index.js";
-class PlaybackManager
-{
-    constructor(RecorderManager)
-    {
+class PlaybackManager {
+    constructor(RecorderManager) {
         this.mRecorderManager = RecorderManager;
         this.mIsPlaying = false;
         this.mIndex = 0;
         this.mLastElement = 0;
+        this.mFirstIndex = 0;
         this.mGameObjectSet = null;
         this.mRecording = null;
         this.mJSONRecording = null;
+        this.mPlaybackSpeed = 0.0;
+        this.mIsReverse;
     }
 
-    play(bool)
-    {
-        this.mIsPlaying = true;
+    setSpeed(speed) {
+        this.mPlaybackSpeed = speed;
+    }
+
+    getSpeed() {
+        return this.mPlaybackSpeed;
+    }
+
+    play(dontUseJSON) {
+        //check if 0
+        if (Math.abs(this.mPlaybackSpeed) < Number.EPSILON) {
+            console.log("Playback speed cannot be 0");
+            return;
+        }
+        //check if reversing
+        if (this.mPlaybackSpeed > 0) {
+            this.mIndex = 0;
+            this.mIsReverse = false;
+        } else {
+            this.mIndex = this.mLastElement - 1;
+            this.mIsReverse = true;
+        }
         this.mGameObjectSet = this.mRecorderManager.getGameObjectSet();
-        if(bool)
-        {
+        //check if using JSON
+        if (dontUseJSON) {
             this.mRecording = this.mRecorderManager.getRecording();
-        } else
-        {
+        } else {
             this.mRecording = this.mJSONRecording;
         }
         this.mLastElement = this.mRecording.length;
+        this.mIsPlaying = true;
         this.mRecorderManager.printArray();
-        this.mIndex = 0;
     }
 
-    update()
-    {
-        if(this.mIsPlaying)
-        {
-            if(this.mIndex < this.mLastElement)
-            {
-                for(let i = 0; i < this.mRecording[this.mIndex].length; i++)
-                {
-                    this.mGameObjectSet.getObjectAt(i).deserialize(this.mRecording[this.mIndex][i]);
+    update() {
+        if (this.mIsPlaying) {
+            if (this.isWithinBounds()) {
+                let index = Math.floor(this.mIndex);
+                //console.log(this.mIsReverse);
+                for (let i = 0; i < this.mRecording[index].length; i++) {
+                    this.mGameObjectSet.getObjectAt(i).deserialize(this.mRecording[index][i]);
                 }
-                this.mIndex++;
-            } else
-            {
+                this.mIndex += this.mPlaybackSpeed;
+            } else {
                 this.mIsPlaying = false;
             }
         }
     }
 
-    draw(Camera)
-    {
-        if(this.mIsPlaying) this.mGameObjectSet.draw(Camera);
+    isWithinBounds() {
+        if (this.mIsReverse) {
+            return this.mIndex > 0;
+        } else {
+            return this.mIndex < this.mLastElement;
+        }
     }
 
-    loadFromJSON(filepath)
-    {
+    draw(Camera) {
+        if (this.mIsPlaying) this.mGameObjectSet.draw(Camera);
+    }
+
+    loadFromJSON(filepath) {
         this.mJSONRecording = engine.json.get(filepath);
     }
 

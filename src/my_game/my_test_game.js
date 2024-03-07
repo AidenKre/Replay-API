@@ -174,7 +174,7 @@ class MyGame extends engine.Scene {
         if (engine.input.isKeyClicked(engine.input.keys.U))
         {
             this.isPlaying = true;
-            this.mPlaybackManager.play();
+            this.mPlaybackManager.play(true);
         }
         if (engine.input.isKeyClicked(engine.input.keys.I))
         {
