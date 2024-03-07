@@ -1,3 +1,4 @@
+import engine from "./index.js";
 class PlaybackManager
 {
     constructor(RecorderManager)
@@ -8,14 +9,21 @@ class PlaybackManager
         this.mLastElement = 0;
         this.mGameObjectSet = null;
         this.mRecording = null;
+        this.mJSONRecording = null;
     }
 
-    play()
+    play(bool)
     {
         this.mIsPlaying = true;
-        this.mLastElement = this.mRecorderManager.getLength();
         this.mGameObjectSet = this.mRecorderManager.getGameObjectSet();
-        this.mRecording = this.mRecorderManager.getRecording();
+        if(bool)
+        {
+            this.mRecording = this.mRecorderManager.getRecording();
+        } else
+        {
+            this.mRecording = this.mJSONRecording;
+        }
+        this.mLastElement = this.mRecording.length;
         this.mRecorderManager.printArray();
         this.mIndex = 0;
     }
@@ -45,7 +53,7 @@ class PlaybackManager
 
     loadFromJSON(filepath)
     {
-        this.mRecording = JSON.parse(filepath);
+        this.mJSONRecording = engine.json.get(filepath);
     }
 
 }
