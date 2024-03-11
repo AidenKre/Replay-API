@@ -12,6 +12,8 @@ class Hero extends engine.GameObjectRenderable {
         this.mRenderComponent.getXform().setPosition(35, 50);
         this.mRenderComponent.getXform().setSize(9, 12);
         this.mRenderComponent.setElementPixelPositions(0, 120, 0, 180);
+
+        this.mHealth = 4;
     }
 
     update() {
@@ -31,18 +33,24 @@ class Hero extends engine.GameObjectRenderable {
         }
     }
 
+    hit() 
+    {
+        this.mHealth--;
+        return this.mHealth < 1;
+    }
+
     serialize()
     {
         return {
             xform: super.serialize(),
-            color: [1,1,1,0]
+            health: this.mHealth
         }
     }
 
     deserialize(data)
     {
         super.deserialize(data.xform);
-        console.log(data.color);
+        this.mHealth = data.health;
     }
 }
 
