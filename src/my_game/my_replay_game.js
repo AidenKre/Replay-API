@@ -38,6 +38,13 @@ class MyGame extends engine.Scene {
         this.mRecorderManager = null;
         this.mPlaybackManager = null;
         this.mRecordingSet = null;
+
+        this.mIsRecording = null;
+        this.mIsPlaying = null;
+        this.mIsRecordingPresent = null;
+
+        this.mPlayerOneHealth = null; // Player one health
+        this.mPlayerTwoHealth = null; // Player two health
     }
 
     load() {
@@ -57,12 +64,10 @@ class MyGame extends engine.Scene {
         this.mCamera = new engine.Camera(
             vec2.fromValues(50, 37.5), // position of the camera
             100,                       // width of camera
-            [400, 0, 400, 400]           // viewport (orgX, orgY, width, height)
+            [0, 0, 400, 400]           // viewport (orgX, orgY, width, height)
         );
         this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray
-        this.mPlaybackCamera.setBackgroundColor([0.5, 0.5, 0.5, 1]);
-        // sets the background to darker grey
 
         this.mBrain = new Brain(this.kMinionSprite);
 
@@ -94,10 +99,14 @@ class MyGame extends engine.Scene {
         this.mRecordingSet.addToSet(this.mLMinion);
         this.mRecordingSet.addToSet(this.mPortal);
         
-        console.log(this.mHero.serialize());
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
         this.mRecorderManager.init();
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
+
+        this.mIsRecording = false;
+        this.mIsPlaying = false;
+        this.mIsRecordingPresent = false;
+
     }
 
     // This is the draw function, make sure to setup proper drawing environment, and more
@@ -124,7 +133,7 @@ class MyGame extends engine.Scene {
     // The update function, updates the application state. Make sure to _NOT_ draw
     // anything from this function!
     update() {
-        let msg = "L/R: Left or Right Minion; H: Dye; B: Brain]: ";
+        let msg = "R: " + this.isRecording + " P: " + this.isPlaying + " HasR: " + this.isRecordingPresent + " Player1 Health: " + this.mPlayerOneHealth + " Player2 Health: " + this.mPlayerTwoHealth;
         this.mPlaybackManager.update();
         this.mLMinion.update();
         this.mRMinion.update();
@@ -189,12 +198,12 @@ class MyGame extends engine.Scene {
         {
             this.mPlaybackManager.loadFromJSON(this.kJSONRecording);
         }
-        this.mMsg.setText(msg + this.mChoice);
+        this.mMsg.setText("R: " + this.isRecording + " P: " + this.isPlaying + " HasR: " + this.isRecordingPresent + " Player1 Health: " + this.mPlayerOneHealth + " Player2 Health: " + this.mPlayerTwoHealth);
     }
 }
 
 window.onload = function () {
-    engine.init("GLCanvas");
+    engine.init("ReplayCanvas");
 
     let myGame = new MyGame();
     myGame.start();

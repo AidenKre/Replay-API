@@ -11,11 +11,18 @@
         <script type="text/javascript" src="src/lib/gl-matrix.js"></script>
 
         <!-- our game -->
-        <script type="module" src="./src/my_game/my_test_game.js"></script>
+        <script type="module" src="./src/my_game/my_tutorial_game.js"></script>
+        <!-- our other game -->
+        <script type="module" src="./src/my_game/my_replay_game.js"></script>
     </head>
 
      <body>    
-        <canvas id="GLCanvas" width="800" height="400">
+        <canvas id="TutorialCanvas" width="400" height="400">
+            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+        <canvas id="ReplayCanvas" width="400" height="400">
             <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
             Your browser does not support the HTML5 canvas.
             <!-- this message will show only if WebGL clearing failed -->
