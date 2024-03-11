@@ -7,7 +7,7 @@ import Brain from "./objects/brain.js";
 import Hero from "./objects/hero.js";
 import TextureObject from "./objects/texture_object.js";
 
-class MyGame extends engine.Scene {
+class TutorialGame extends engine.Scene {
     constructor() {
         super();
         this.kMinionSprite = "assets/minion_sprite.png";
@@ -88,7 +88,6 @@ class MyGame extends engine.Scene {
         //this.mRecordingSet.addToSet(this.mBrain);
         
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
-        this.mRecorderManager.init();
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
 
         this.isRecording = false;
@@ -169,8 +168,10 @@ class MyGame extends engine.Scene {
 }
 
 window.onload = function () {
-    engine.init("TutorialCanvas");
+    engine.init("GLCanvas");
 
-    let myGame = new MyGame();
+    let myGame = new TutorialGame();
     myGame.start();
 }
+
+export default TutorialGame;

@@ -9,7 +9,7 @@ import Minion from "./objects/minion.js";
 import DyePack from "./objects/dye_pack.js";
 import TextureObject from "./objects/texture_object.js";
 
-class MyGame extends engine.Scene {
+class ReplayGame extends engine.Scene {
     constructor() {
         super();
         this.kMinionSprite = "assets/minion_sprite.png";
@@ -100,7 +100,6 @@ class MyGame extends engine.Scene {
         this.mRecordingSet.addToSet(this.mPortal);
         
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
-        this.mRecorderManager.init();
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
 
         this.mIsRecording = false;
@@ -203,8 +202,10 @@ class MyGame extends engine.Scene {
 }
 
 window.onload = function () {
-    engine.init("ReplayCanvas");
+    engine.init("GLCanvas");
 
-    let myGame = new MyGame();
+    let myGame = new ReplayGame();
     myGame.start();
 }
+
+export default ReplayGame;
