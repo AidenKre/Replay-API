@@ -12,6 +12,8 @@ class TextureObject extends engine.GameObjectRenderable {
         this.mRenderComponent.setColor([1, 1, 1, 0.1]);
         this.mRenderComponent.getXform().setPosition(x, y);
         this.mRenderComponent.getXform().setSize(w, h);
+
+        this.mHealth = 4;
     }
 
     update(up, down, left, right, rot) {
@@ -31,6 +33,27 @@ class TextureObject extends engine.GameObjectRenderable {
         if (engine.input.isKeyPressed(rot)) {
             xform.incRotationByRad(this.kRDelta);
         }
+    }
+
+    
+    hit() 
+    {
+        this.mHealth--;
+        return this.mHealth < 1;
+    }
+
+    serialize()
+    {
+        return {
+            xform: super.serialize(),
+            health: this.mHealth
+        }
+    }
+
+    deserialize(data)
+    {
+        super.deserialize(data.xform);
+        this.mHealth = data.health;
     }
 }
 

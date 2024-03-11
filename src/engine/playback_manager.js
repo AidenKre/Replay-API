@@ -9,12 +9,18 @@ class PlaybackManager {
         this.mGameObjectSet = null;
         this.mRecording = null;
         this.mJSONRecording = null;
-        this.mPlaybackSpeed = 0.0;
+        this.mPlaybackSpeed = 1.0;
+        this.mPauseModifier = 1.0;
         this.mIsReverse;
     }
 
     setSpeed(speed) {
         this.mPlaybackSpeed = speed;
+        if (this.mPlaybackSpeed > 0) {
+            this.mIsReverse = false;
+        } else {
+            this.mIsReverse = true;
+        }
     }
 
     getSpeed() {
@@ -23,6 +29,11 @@ class PlaybackManager {
 
     play(dontUseJSON) {
         //check if 0
+        if(this.mPauseModifier == 0)
+        {
+            this.mPauseModifier = 1;
+            return;
+        }
         if (Math.abs(this.mPlaybackSpeed) < Number.EPSILON) {
             console.log("Playback speed cannot be 0");
             return;
@@ -30,10 +41,8 @@ class PlaybackManager {
         //check if reversing
         if (this.mPlaybackSpeed > 0) {
             this.mIndex = 0;
-            this.mIsReverse = false;
         } else {
             this.mIndex = this.mLastElement - 1;
-            this.mIsReverse = true;
         }
         this.mGameObjectSet = this.mRecorderManager.getGameObjectSet();
         //check if using JSON
@@ -47,15 +56,19 @@ class PlaybackManager {
         this.mRecorderManager.printArray();
     }
 
+    pause()
+    {
+        this.mPauseModifier = 0;
+    }
+
     update() {
         if (this.mIsPlaying) {
             if (this.isWithinBounds()) {
                 let index = Math.floor(this.mIndex);
-                //console.log(this.mIsReverse);
                 for (let i = 0; i < this.mRecording[index].length; i++) {
                     this.mGameObjectSet.getObjectAt(i).deserialize(this.mRecording[index][i]);
                 }
-                this.mIndex += this.mPlaybackSpeed;
+                this.mIndex += this.mPlaybackSpeed * this.mPauseModifier;
             } else {
                 this.mIsPlaying = false;
             }
