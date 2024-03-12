@@ -128,7 +128,7 @@ class TutorialGame extends engine.Scene {
     }
 
     update() {
-        let msg = "Recording: " + this.isRecording + " Playing: " + this.isPlaying + " Recording present: " + this.isRecordingPresent + " Playback speed: " + this.mPlaybackSpeed;
+        let msg = "Recording: " + this.isRecording + " Playing: " + this.isPlaying + " Recording present: " + this.isRecordingPresent + " Playback speed: " + this.mPlaybackManager.getSpeed().toFixed(2);
         this.mPlaybackManager.update();
         this.mRecorderManager.update();
         this.mHero.update();
@@ -157,12 +157,13 @@ class TutorialGame extends engine.Scene {
             this.mPlaybackManager.loop();
         }
         if (engine.input.isKeyPressed(engine.input.keys.One)) {
-            this.mPlaybackSpeed += 0.05;
-            this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
+            this.mPlaybackManager.incSpeed(0.05);
         }
         if (engine.input.isKeyPressed(engine.input.keys.Two)) {
-            this.mPlaybackSpeed -= 0.05;
-            this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
+           this.mPlaybackManager.incSpeed(-0.05);
+        }
+        if (engine.input.isKeyPressed(engine.input.keys.Three)){
+           this.mPlaybackManager.setSpeed(1);
         }
 
         this.mMsg.setText(msg);

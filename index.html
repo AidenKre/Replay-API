@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Recording API</title>
-        <link rel ="icon" type ="image/x-icon" href="./assets/favicon.png">
 
-        <!-- the following says there are javascript source code contained in 
+<head>
+    <title>Recording API</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+
+    <!-- the following says there are javascript source code contained in 
              the external source files
         -->
-        <!-- external library -->
-        <script type="text/javascript" src="src/lib/gl-matrix.js"></script>
+    <!-- external library -->
+    <script type="text/javascript" src="src/lib/gl-matrix.js"></script>
 
-        <!-- our game -->
-        <script type="module" src="./src/my_game/my_game.js"></script>
-    </head>
+    <!-- our game -->
+    <script type="module" src="./src/my_game/my_game.js"></script>
+</head>
 
-     <body>    
-        <canvas id="GLCanvas" width="400" height="400">
-            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
-            Your browser does not support the HTML5 canvas.
-            <!-- this message will show only if WebGL clearing failed -->
-        </canvas>
-    </body>
-    <div>
-        <b>N</b>: to change scenes <br>
-        <b>WASD/Arrow Keys</b>: to move<br>
-        <b>O</b>: to start recording<br>
-        <b>P</b>: to stop recording<br>
-        <b>U</b>: to play recording<br>
-        <b>I</b>: to pause recording<br>
+<body>
+    <canvas id="GLCanvas" width="400" height="400">
+        <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+        Your browser does not support the HTML5 canvas.
+        <!-- this message will show only if WebGL clearing failed -->
+    </canvas>
+</body>
+<div>
+    <b>UNIVERSAL CONTROLS</b> <br>
+    <b>N</b>: to switch games <br>
+    <b>WASD/Arrow Keys</b>: to move<br>
+    <b>L</b> : toggle looping of playback<br>
 
-        <b>J</b> : to save to JSON<br>
-        <b>K</b> : play from JSON<br>
-        <b>L</b> : toggle looping of playback<br>
+    <b>REPLAY GAME CONTROLS</b> <br>
+    <b>SPACE</b> : to shoot<br>
 
-        <b>1/2</b> : playback speed<br>
-    
-    </div>
+    <b>TUTORIAL GAME CONTROLS</b> <br>
+    <b>1/2</b> : playback speed<br>
+    <b>3</b> : set playback speed to 1<br>
+    <b>O</b>: to start recording<br>
+    <b>P</b>: to stop recording<br>
+    <b>U</b>: to play recording<br>
+    <b>I</b>: to pause recording<br>
+
+    <b>J</b> : to save to JSON<br>
+    <b>K</b> : play from JSON<br>
+
+</div>
+
 </html>
