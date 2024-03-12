@@ -104,31 +104,37 @@ class ReplayGame extends engine.Scene {
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
             engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
-        if (engine.input.isKeyClicked(engine.input.keys.O))
-        {
-            this.mRecorderManager.start();
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.P))
-        {
-            this.mRecorderManager.stop();
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.U))
-        {
-            this.mPlaybackManager.play(true);
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.I))
-        {
-            this.mPlaybackManager.pause();
-        }
-
-        if (engine.input.isKeyClicked(engine.input.keys.J))
-        {
-            this.mRecorderManager.saveToJSON();
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.K))
-        {
-            this.mPlaybackManager.loadFromJSON(this.kJSONRecording);
-        }
+            if (engine.input.isKeyClicked(engine.input.keys.O)) {
+                this.mRecorderManager.start();
+            }
+            if (engine.input.isKeyClicked(engine.input.keys.P)) {
+                this.mRecorderManager.stop();
+            }
+            if (engine.input.isKeyClicked(engine.input.keys.U)) {
+                this.mPlaybackManager.play(true);
+            }
+            if (engine.input.isKeyClicked(engine.input.keys.I)) {
+                this.mPlaybackManager.pause();
+            }
+            if (engine.input.isKeyClicked(engine.input.keys.J)) {
+                this.mRecorderManager.saveToJSON();
+            }
+            if (engine.input.isKeyClicked(engine.input.keys.K)) {
+                this.mPlaybackManager.loadFromJSON(this.kJSONRecording);
+                this.mPlaybackManager.play(false);
+            }
+            if (engine.input.isKeyClicked(engine.input.keys.L))
+            {
+                this.mPlaybackManager.loop();
+            }
+            if (engine.input.isKeyPressed(engine.input.keys.One)) {
+                this.mPlaybackSpeed += 0.05;
+                this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
+            }
+            if (engine.input.isKeyPressed(engine.input.keys.Two)) {
+                this.mPlaybackSpeed -= 0.05;
+                this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
+            }
 
         this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + " Player Two Health: " + this.mPortal.getHealth());
     }

@@ -133,9 +133,6 @@ class TutorialGame extends engine.Scene {
         this.mRecorderManager.update();
         this.mHero.update();
 
-        this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
-            engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
-
         if (engine.input.isKeyClicked(engine.input.keys.O)) {
             this.mRecorderManager.start();
         }
