@@ -86,7 +86,7 @@ class ReplayGame extends engine.Scene {
 
         this.mRecorderManager.DynamicListenTo(this.mMasterDyePack, this.mDyePackSet);
 
-        
+
 
     }
 
@@ -116,23 +116,25 @@ class ReplayGame extends engine.Scene {
 
         this.mPlaybackManager.update();
         this.mRecorderManager.update();
-        this.mHero.update();
-        this.mDyePackSet.update();
         this.DyePackCleanUp();
-        this.DyePackCollion();
         this.ResetManagement();
-        this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
-            engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
+        if (!this.mPlaybackManager.IsPlaying()) {
+            this.mHero.update();
+            this.mDyePackSet.update();
+            this.DyePackCollion();
+            this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
+                engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
+
+            if (engine.input.isKeyClicked(engine.input.keys.Space)) {
+                let temp = this.mMasterDyePack.spawn();
+                let pos = this.mHero.getXform().getPosition();
+                temp.getXform().setPosition(pos[0], pos[1]);
+                this.mDyePackSet.addToSet(temp);
+            }
+        }
 
         if (engine.input.isKeyClicked(engine.input.keys.L)) {
             this.mPlaybackManager.loop();
-        }
-
-        if (engine.input.isKeyClicked(engine.input.keys.Space)) {
-            let temp = this.mMasterDyePack.spawn();
-            let pos = this.mHero.getXform().getPosition();
-            temp.getXform().setPosition(pos[0], pos[1]);
-            this.mDyePackSet.addToSet(temp);
         }
 
         this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + "    Player Two Health: " + this.mPortal.getHealth());
@@ -155,7 +157,7 @@ class ReplayGame extends engine.Scene {
             if (temp.pixelTouches(this.mPortal, pos)) {
                 temp.hit();
                 this.mPortalDead = this.mPortal.hit();
-                if(this.mPortalDead) this.KillCam();
+                if (this.mPortalDead) this.KillCam();
             }
 
         }
