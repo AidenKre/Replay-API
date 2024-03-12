@@ -27,6 +27,11 @@ class GameObjectRecordable extends GameObject
         xform.setSize(data.scale[0], data.scale[1]);
         
     }
+    //if static then do not use spawn method
+    spawn()
+    {
+        
+    }
 }
 
 export default GameObjectRecordable;

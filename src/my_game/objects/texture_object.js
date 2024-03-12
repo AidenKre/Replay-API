@@ -39,7 +39,6 @@ class TextureObject extends engine.GameObjectRenderable {
     hit() 
     {
         this.mHealth--;
-        console.log(this.mHealth);
         return this.mHealth < 1;
     }
 
