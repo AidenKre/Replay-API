@@ -2,7 +2,7 @@ import engine from "./index.js";
 
 class RecorderManager
 {
-    constructor(GameObjectSet)
+    constructor(object)
     {
         this.mGameObjectSet = new engine.GameObjectSet();
         this.mRecording = [];
@@ -10,7 +10,7 @@ class RecorderManager
         this.mMaxRecordingLength = -1;
         if(object != null) 
         {
-        this.ListenTo(GameObjectSet);
+        this.ListenTo(object);
         }
 
         this.mMasterList = [];
@@ -43,14 +43,6 @@ class RecorderManager
         this.mMasterList.push(Master);
         this.mDynamicSet.push(GameObjectSet);
     }
-
-/*    init()
-    {
-        for(let i = 0; i < this.mGameObjectSet.size(); i++)
-        {
-            this.mRecording[i] = [];
-        }   
-    } */
 
     update()
     {
