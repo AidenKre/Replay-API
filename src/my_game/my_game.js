@@ -46,6 +46,11 @@ class MyGame extends engine.Scene {
         if(this.mIsUsingFirstGame) 
         {
             this.mReplayGame.update();
+            if(this.mReplayGame.IsReadyToReset())
+            {
+                this.mReplayGame = new ReplayGame();
+                this.mReplayGame.init();
+            }
         } else
         {
             this.mTutorialGame.update();
