@@ -15,6 +15,7 @@ class TutorialGame extends engine.Scene {
         this.kGrassSprite = "assets/grass.png";
         this.kLavaSprite = "assets/lava.png";
         this.kCloudSprite = "assets/cloud.png";
+        this.kJSONRecording = "src/my_game/recordings/cutscene.json";
 
 
         // The camera to view the scene
@@ -42,6 +43,7 @@ class TutorialGame extends engine.Scene {
         engine.texture.load(this.kGrassSprite);
         engine.texture.load(this.kLavaSprite);
         engine.texture.load(this.kCloudSprite);
+        engine.json.load(this.kJSONRecording);
     }
 
     unload() {
@@ -50,6 +52,7 @@ class TutorialGame extends engine.Scene {
         engine.texture.unload(this.kGrassSprite);
         engine.texture.unload(this.kLavaSprite);
         engine.texture.unload(this.kCloudSprite);
+        engine.json.unload(this.kJSONRecording);
     }
 
     init() {
@@ -69,6 +72,9 @@ class TutorialGame extends engine.Scene {
 
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
 
+        this.mHero.getXform().setPosition(11.9, 5.6);
+        this.mPortal.getXform().setPosition(35.3, 5.4);
+
         this.mGrassOne = new TextureObject(this.kGrassSprite, 20, -15, 45, 30);
         this.mGrassTwo = new TextureObject(this.kGrassSprite, 80, -5, 45, 30);
         this.mLavaOne = new TextureObject(this.kLavaSprite, 50, -30, 50, 50);
@@ -86,7 +92,7 @@ class TutorialGame extends engine.Scene {
         this.mRecordingSet.addToSet(this.mHero);
         this.mRecordingSet.addToSet(this.mPortal);
         //this.mRecordingSet.addToSet(this.mBrain);
-        
+
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
 
@@ -118,7 +124,7 @@ class TutorialGame extends engine.Scene {
         this.mMsg.draw(this.mCamera);
         this.mPlaybackManager.draw(this.mCamera);
 
-        
+
     }
 
     update() {
@@ -130,40 +136,39 @@ class TutorialGame extends engine.Scene {
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
             engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
-        let h = [];
-
-        if (engine.input.isKeyClicked(engine.input.keys.O))
-        {
-            this.isRecording = true;
+        if (engine.input.isKeyClicked(engine.input.keys.O)) {
             this.mRecorderManager.start();
         }
-        if (engine.input.isKeyClicked(engine.input.keys.P))
-        {
-            this.isRecording = false;
-            this.isRecordingPresent = true;
+        if (engine.input.isKeyClicked(engine.input.keys.P)) {
             this.mRecorderManager.stop();
         }
-        if (engine.input.isKeyClicked(engine.input.keys.U))
+        if (engine.input.isKeyClicked(engine.input.keys.U)) {
+            this.mPlaybackManager.play(true);
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.I)) {
+            this.mPlaybackManager.pause();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.J)) {
+            this.mRecorderManager.saveToJSON();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.K)) {
+            this.mPlaybackManager.loadFromJSON(this.kJSONRecording);
+            this.mPlaybackManager.play(false);
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.L))
         {
-            this.isPlaying = true;
+            this.mPlaybackManager.loop();
+        }
+        if (engine.input.isKeyPressed(engine.input.keys.One)) {
+            this.mPlaybackSpeed += 0.05;
             this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
-            this.mPlaybackManager.play();
         }
-        if (engine.input.isKeyClicked(engine.input.keys.I))
-        {
-            //this.isPlaying = false;
-            //this.mRecorderManager.stop();
+        if (engine.input.isKeyPressed(engine.input.keys.Two)) {
+            this.mPlaybackSpeed -= 0.05;
+            this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
         }
-        if (engine.input.isKeyClicked(engine.input.keys.One))
-        {
-            this.mPlaybackSpeed += 0.1;
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.Two))
-        {
-            this.mPlaybackSpeed -= 0.1;
-        }
-        
-        this.mMsg.setText("Recording: " + this.isRecording + " Playing: " + this.isPlaying + " Recording present: " + this.isRecordingPresent + " Playback speed: " + this.mPlaybackSpeed);
+
+        this.mMsg.setText(msg);
     }
 }
 

@@ -5,7 +5,6 @@ import engine from "../engine/index.js";
 // user stuff
 import Brain from "./objects/brain.js";
 import Hero from "./objects/hero.js";
-import Minion from "./objects/minion.js";
 import DyePack from "./objects/dye_pack.js";
 import TextureObject from "./objects/texture_object.js";
 
@@ -14,7 +13,6 @@ class ReplayGame extends engine.Scene {
         super();
         this.kMinionSprite = "assets/minion_sprite.png";
         this.kMinionPortal = "assets/minion_portal.png";
-        this.kJSONRecording = "src/my_game/recordings/sample.json";
 
         // The camera to view the scene
         this.mCamera = null;
@@ -23,17 +21,8 @@ class ReplayGame extends engine.Scene {
 
         // the hero and the support objects
         this.mHero = null;
-        this.mBrain = null;
-        this.mPortalHit = null;
-        this.mHeroHit = null;
 
         this.mPortal = null;
-        this.mLMinion = null;
-        this.mRMinion = null;
-
-        this.mCollide = null;
-
-        this.mChoice = 'H';
 
         this.mRecorderManager = null;
         this.mPlaybackManager = null;
@@ -42,21 +31,16 @@ class ReplayGame extends engine.Scene {
         this.mIsRecording = null;
         this.mIsPlaying = null;
         this.mIsRecordingPresent = null;
-
-        this.mPlayerOneHealth = null; // Player one health
-        this.mPlayerTwoHealth = null; // Player two health
     }
 
     load() {
         engine.texture.load(this.kMinionSprite);
         engine.texture.load(this.kMinionPortal);
-        engine.json.load(this.kJSONRecording);
     }
 
     unload() {
         engine.texture.unload(this.kMinionSprite);
         engine.texture.unload(this.kMinionPortal);
-        engine.json.unload(this.kJSONRecording);
     }
 
     init() {
@@ -68,21 +52,11 @@ class ReplayGame extends engine.Scene {
         );
         this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray
-
+        this.mHero = new Hero(this.kMinionSprite);
         this.mBrain = new Brain(this.kMinionSprite);
 
-        // Step D: Create the hero object with texture from the lower-left corner 
-        this.mHero = new Hero(this.kMinionSprite);
-
-        this.mPortalHit = new DyePack(this.kMinionSprite);
-        this.mPortalHit.setVisibility(false);
-        this.mHeroHit = new DyePack(this.kMinionSprite);
-        this.mHeroHit.setVisibility(false);
 
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
-
-        this.mLMinion = new Minion(this.kMinionSprite, 30, 30);
-        this.mRMinion = new Minion(this.kMinionSprite, 70, 30);
 
         this.mMsg = new engine.FontRenderable("Status Message");
         this.mMsg.setColor([0, 0, 0, 1]);
@@ -93,10 +67,6 @@ class ReplayGame extends engine.Scene {
 
         this.mRecordingSet = new engine.GameObjectSet();
         this.mRecordingSet.addToSet(this.mHero);
-        this.mRecordingSet.addToSet(this.mBrain);
-        this.mRecordingSet.addToSet(this.mLMinion);
-        this.mRecordingSet.addToSet(this.mLMinion);
-        this.mRecordingSet.addToSet(this.mLMinion);
         this.mRecordingSet.addToSet(this.mPortal);
         
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
@@ -119,12 +89,7 @@ class ReplayGame extends engine.Scene {
 
         // Step  C: Draw everything
         this.mHero.draw(this.mCamera);
-        this.mBrain.draw(this.mCamera);
         this.mPortal.draw(this.mCamera);
-        this.mLMinion.draw(this.mCamera);
-        this.mRMinion.draw(this.mCamera);
-        this.mPortalHit.draw(this.mCamera);
-        this.mHeroHit.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
         this.mPlaybackManager.draw(this.mCamera);
     }
@@ -132,55 +97,13 @@ class ReplayGame extends engine.Scene {
     // The update function, updates the application state. Make sure to _NOT_ draw
     // anything from this function!
     update() {
-        let msg = "R: " + this.isRecording + " P: " + this.isPlaying + " HasR: " + this.isRecordingPresent + " Player1 Health: " + this.mPlayerOneHealth + " Player2 Health: " + this.mPlayerTwoHealth;
         this.mPlaybackManager.update();
-        this.mLMinion.update();
-        this.mRMinion.update();
         this.mRecorderManager.update();
         this.mHero.update();
 
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
             engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
-        let h = [];
-
-        // Portal intersects with which ever is selected
-        if (this.mPortal.pixelTouches(this.mCollide, h)) {
-            this.mPortalHit.setVisibility(true);
-            this.mPortalHit.getXform().setXPos(h[0]);
-            this.mPortalHit.getXform().setYPos(h[1]);
-        } else {
-            this.mPortalHit.setVisibility(false);
-        }
-
-        // hero always collide with Brain (Brain chases hero)
-        if (!this.mHero.pixelTouches(this.mBrain, h)) {
-            this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), 0.05);
-            engine.GameObject.prototype.update.call(this.mBrain);
-            this.mHeroHit.setVisibility(false);
-        } else {
-            this.mHeroHit.setVisibility(true);
-            this.mHeroHit.getXform().setPosition(h[0], h[1]);
-        }
-
-        // decide which to collide
-        if (engine.input.isKeyClicked(engine.input.keys.L)) {
-            this.mCollide = this.mLMinion;
-            this.mChoice = 'L';
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.R)) {
-            this.mCollide = this.mRMinion;
-            this.mChoice = 'R';
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.B)) {
-            this.mCollide = this.mBrain;
-            this.mChoice = 'B';
-            this.mRecorderManager.printarray();
-        }
-        if (engine.input.isKeyClicked(engine.input.keys.H)) {
-            this.mCollide = this.mHero;
-            this.mChoice = 'H';
-        }
         if (engine.input.isKeyClicked(engine.input.keys.O))
         {
             this.mRecorderManager.start();
@@ -191,13 +114,23 @@ class ReplayGame extends engine.Scene {
         }
         if (engine.input.isKeyClicked(engine.input.keys.U))
         {
-            this.mPlaybackManager.play(false);
+            this.mPlaybackManager.play(true);
         }
         if (engine.input.isKeyClicked(engine.input.keys.I))
         {
+            this.mPlaybackManager.pause();
+        }
+
+        if (engine.input.isKeyClicked(engine.input.keys.J))
+        {
+            this.mRecorderManager.saveToJSON();
+        }
+        if (engine.input.isKeyClicked(engine.input.keys.K))
+        {
             this.mPlaybackManager.loadFromJSON(this.kJSONRecording);
         }
-        this.mMsg.setText("R: " + this.isRecording + " P: " + this.isPlaying + " HasR: " + this.isRecordingPresent + " Player1 Health: " + this.mPlayerOneHealth + " Player2 Health: " + this.mPlayerTwoHealth);
+
+        this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + " Player Two Health: " + this.mPortal.getHealth());
     }
 }
 

@@ -42,6 +42,11 @@ class TextureObject extends engine.GameObjectRenderable {
         return this.mHealth < 1;
     }
 
+    getHealth()
+    {
+        return this.mHealth;
+    }
+
     serialize()
     {
         return {
