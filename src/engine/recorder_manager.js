@@ -8,7 +8,7 @@ class RecorderManager
         this.mRecording = [];
         this.mIsRecording = false;
         this.mMaxRecordingLength = -1;
-        if(GameObjectSet != null) 
+        if(object != null) 
         {
         this.ListenTo(GameObjectSet);
         }
