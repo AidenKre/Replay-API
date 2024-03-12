@@ -10,7 +10,7 @@ class Hero extends engine.GameObjectRenderable {
         this.mRenderComponent = new engine.SpriteRenderable(spriteTexture);
         this.mRenderComponent.setColor([1, 1, 1, 0]);
         this.mRenderComponent.getXform().setPosition(35, 50);
-        this.mRenderComponent.getXform().setSize(18, 18);
+        this.mRenderComponent.getXform().setSize(30, 30);
         this.mRenderComponent.setElementPixelPositions(0, 512, 0, 512);
 
         this.mHealth = 4;

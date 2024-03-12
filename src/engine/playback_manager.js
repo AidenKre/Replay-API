@@ -32,6 +32,10 @@ class PlaybackManager {
         return this.mPlaybackSpeed;
     }
 
+    getLooping() {
+        return this.mIsLooping;
+    }
+
     play(dontUseJSON) {
         //check if 0
         if(this.mPauseModifier == 0)

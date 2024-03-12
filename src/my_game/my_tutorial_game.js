@@ -16,6 +16,7 @@ class TutorialGame extends engine.Scene {
         this.kLavaSprite = "assets/lava.png";
         this.kCloudSprite = "assets/cloud.png";
         this.kJSONRecording = "src/my_game/recordings/cutscene.json";
+        this.kHomerSprite = "assets/Homar.png";
 
 
         // The camera to view the scene
@@ -44,6 +45,7 @@ class TutorialGame extends engine.Scene {
         engine.texture.load(this.kLavaSprite);
         engine.texture.load(this.kCloudSprite);
         engine.json.load(this.kJSONRecording);
+        engine.texture.load(this.kHomerSprite);
     }
 
     unload() {
@@ -53,6 +55,7 @@ class TutorialGame extends engine.Scene {
         engine.texture.unload(this.kLavaSprite);
         engine.texture.unload(this.kCloudSprite);
         engine.json.unload(this.kJSONRecording);
+        engine.texture.unload(this.kHomerSprite);
     }
 
     init() {
@@ -68,11 +71,12 @@ class TutorialGame extends engine.Scene {
         this.mBrain = new Brain(this.kMinionSprite);
 
         // Step D: Create the hero object with texture from the lower-left corner 
-        this.mHero = new Hero(this.kMinionSprite);
+        this.mHero = new Hero(this.kHomerSprite);
 
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
 
         this.mHero.getXform().setPosition(11.9, 5.6);
+        this.mHero.getXform().setSize(9, 12);
         this.mPortal.getXform().setPosition(35.3, 5.4);
 
         this.mGrassOne = new TextureObject(this.kGrassSprite, 20, -15, 45, 30);
@@ -83,8 +87,13 @@ class TutorialGame extends engine.Scene {
 
         this.mMsg = new engine.FontRenderable("Status Message");
         this.mMsg.setColor([0, 0, 0, 1]);
-        this.mMsg.getXform().setPosition(5, 85);
-        this.mMsg.setTextHeight(2);
+        this.mMsg.getXform().setPosition(12, 85);
+        this.mMsg.setTextHeight(3);
+
+        this.mMsg2 = new engine.FontRenderable("Status Message");
+        this.mMsg2.setColor([0, 0, 0, 1]);
+        this.mMsg2.getXform().setPosition(5, 80);
+        this.mMsg2.setTextHeight(3);
 
         //this.mCollide = this.mHero;
 
@@ -122,28 +131,35 @@ class TutorialGame extends engine.Scene {
         this.mBrain.draw(this.mCamera);
         this.mPortal.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
+        this.mMsg2.draw(this.mCamera);
         this.mPlaybackManager.draw(this.mCamera);
 
 
     }
 
     update() {
-        let msg = "Recording: " + this.isRecording + " Playing: " + this.isPlaying + " Recording present: " + this.isRecordingPresent + " Playback speed: " + this.mPlaybackManager.getSpeed().toFixed(2);
+        let msg = "Recording: " + this.isRecording + "    Recording present: " + this.isRecordingPresent;
+        let msg2 = "Playing: " + this.isPlaying + "  Playback speed: " + this.mPlaybackManager.getSpeed().toFixed(2) + "  Looping: " + this.mPlaybackManager.getLooping();
         this.mPlaybackManager.update();
         this.mRecorderManager.update();
         this.mHero.update();
 
         if (engine.input.isKeyClicked(engine.input.keys.O)) {
             this.mRecorderManager.start();
+            this.isRecording = true;
         }
         if (engine.input.isKeyClicked(engine.input.keys.P)) {
             this.mRecorderManager.stop();
+            this.isRecording = false;
+            this.isRecordingPresent = true;
         }
         if (engine.input.isKeyClicked(engine.input.keys.U)) {
             this.mPlaybackManager.play(true);
+            this.isPlaying = true;
         }
         if (engine.input.isKeyClicked(engine.input.keys.I)) {
             this.mPlaybackManager.pause();
+            this.isPlaying = false;
         }
         if (engine.input.isKeyClicked(engine.input.keys.J)) {
             this.mRecorderManager.saveToJSON();
@@ -167,6 +183,7 @@ class TutorialGame extends engine.Scene {
         }
 
         this.mMsg.setText(msg);
+        this.mMsg2.setText(msg2);
     }
 }
 
