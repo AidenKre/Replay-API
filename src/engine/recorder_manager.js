@@ -88,7 +88,7 @@ class RecorderManager
         this.mMaxRecordingLength = length;
     }
 
-    setMaxLengthInTime(length)
+    setMaxLengthInSeconds(length)
     {
         this.setMaxLengthInFrames(length * 60);
     }

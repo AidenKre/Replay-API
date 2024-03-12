@@ -29,11 +29,8 @@ class ReplayGame extends engine.Scene {
         this.mPlaybackManager = null;
         this.mRecordingSet = null;
 
-        this.mIsRecording = null;
-        this.mIsPlaying = null;
-        this.mIsRecordingPresent = null;
-
-        this.mPortalDead = null;
+        this.mReadyToReset = false;
+        this.mWasPlaying = false;
     }
 
     load() {
@@ -71,13 +68,12 @@ class ReplayGame extends engine.Scene {
         this.mRecordingSet = new engine.GameObjectSet();
         this.mRecordingSet.addToSet(this.mHero);
         this.mRecordingSet.addToSet(this.mPortal);
-        
+
         this.mRecorderManager = new engine.RecorderManager(this.mRecordingSet);
         this.mPlaybackManager = new engine.PlaybackManager(this.mRecorderManager);
 
-        this.mIsRecording = false;
-        this.mIsPlaying = false;
-        this.mIsRecordingPresent = false;
+        this.mRecorderManager.setMaxLengthInSeconds(4);
+        this.mRecorderManager.start();
 
     }
 
@@ -108,64 +104,68 @@ class ReplayGame extends engine.Scene {
         this.mDyePackSet.update();
         this.DyePackCleanUp();
         this.DyePackCollion();
+        this.ResetManagement();
+        console.log(this.IsReadyToReset());
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
             engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
-            if (engine.input.isKeyClicked(engine.input.keys.L))
-            {
-                this.mPlaybackManager.loop();
-            }
-            if (engine.input.isKeyPressed(engine.input.keys.One)) {
-                this.mPlaybackSpeed += 0.05;
-                this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
-            }
-            if (engine.input.isKeyPressed(engine.input.keys.Two)) {
-                this.mPlaybackSpeed -= 0.05;
-                this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
-            }
+        if (engine.input.isKeyClicked(engine.input.keys.L)) {
+            this.mPlaybackManager.loop();
+        }
 
-            if(engine.input.isKeyClicked(engine.input.keys.Space))
-            {
-                let temp = new DyePack(this.kMinionSprite);
-                let pos = this.mHero.getXform().getPosition();
-                temp.getXform().setPosition(pos[0], pos[1]);
-                this.mDyePackSet.addToSet(temp);
-            }
+        if (engine.input.isKeyClicked(engine.input.keys.Space)) {
+            let temp = new DyePack(this.kMinionSprite);
+            let pos = this.mHero.getXform().getPosition();
+            temp.getXform().setPosition(pos[0], pos[1]);
+            this.mDyePackSet.addToSet(temp);
+        }
 
         this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + " Player Two Health: " + this.mPortal.getHealth());
     }
 
-    DyePackCleanUp()
-    {
-        for(let i = 0; i < this.mDyePackSet.size(); i++)
-        {
+    DyePackCleanUp() {
+        for (let i = 0; i < this.mDyePackSet.size(); i++) {
             let temp = this.mDyePackSet.getObjectAt(i);
-            if(temp.ReadyToDie())
-            {
+            if (temp.ReadyToDie()) {
                 this.mDyePackSet.removeFromSet(temp);
             }
-            
+
         }
     }
 
-    DyePackCollion()
-    {
-        for(let i = 0; i < this.mDyePackSet.size(); i++)
-        {
-            let pos = [0,0];
+    DyePackCollion() {
+        for (let i = 0; i < this.mDyePackSet.size(); i++) {
+            let pos = [0, 0];
             let temp = this.mDyePackSet.getObjectAt(i);
-            if(temp.pixelTouches(this.mPortal, pos))
-            {
+            if (temp.pixelTouches(this.mPortal, pos)) {
                 temp.hit();
-               this.mPortalDead =  this.mPortal.hit();
+                this.mPortalDead = this.mPortal.hit();
+                if(this.mPortalDead) this.KillCam();
             }
-            
+
         }
     }
 
-    PortalDied()
-    {
-        return 
+    KillCam() {
+        this.mRecorderManager.stop();
+        this.mPlaybackManager.play(true);
+
+    }
+
+    ResetManagement() {
+        //voodoo magic
+        if (this.mPlaybackManager.IsPlaying()) {
+            this.mWasPlaying = true;
+        }
+        if (this.mWasPlaying) {
+            if (!this.mPlaybackManager.IsPlaying()) {
+                this.mReadyToReset = true;
+            }
+        }
+    }
+
+    IsReadyToReset() {
+        return this.mReadyToReset;
     }
 }
 
