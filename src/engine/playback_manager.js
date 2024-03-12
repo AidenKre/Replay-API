@@ -24,6 +24,10 @@ class PlaybackManager {
         }
     }
 
+    incSpeed(speed) {
+        this.setSpeed(this.mPlaybackSpeed + speed);
+    }
+
     getSpeed() {
         return this.mPlaybackSpeed;
     }

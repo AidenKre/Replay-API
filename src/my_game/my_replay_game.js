@@ -13,6 +13,8 @@ class ReplayGame extends engine.Scene {
         super();
         this.kMinionSprite = "assets/minion_sprite.png";
         this.kMinionPortal = "assets/minion_portal.png";
+        this.kSimpsonSprite = "assets/simpson.png";
+        this.kHomerSprite = "assets/Homar.png";
 
         // The camera to view the scene
         this.mCamera = null;
@@ -36,11 +38,15 @@ class ReplayGame extends engine.Scene {
     load() {
         engine.texture.load(this.kMinionSprite);
         engine.texture.load(this.kMinionPortal);
+        engine.texture.load(this.kSimpsonSprite);
+        engine.texture.load(this.kHomerSprite);
     }
 
     unload() {
         engine.texture.unload(this.kMinionSprite);
         engine.texture.unload(this.kMinionPortal);
+        engine.texture.unload(this.kSimpsonSprite);
+        engine.texture.unload(this.kHomerSprite);
     }
 
     init() {
@@ -52,13 +58,14 @@ class ReplayGame extends engine.Scene {
         );
         this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray
-        this.mHero = new Hero(this.kMinionSprite);
+        this.mHero = new Hero(this.kHomerSprite);
         this.mBrain = new Brain(this.kMinionSprite);
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
+        this.mSimpsonBackground = new TextureObject(this.kSimpsonSprite, 50, 37.5, 100, 100);
 
         this.mMsg = new engine.FontRenderable("Status Message");
-        this.mMsg.setColor([0, 0, 0, 1]);
-        this.mMsg.getXform().setPosition(1, 2);
+        this.mMsg.setColor([1, 1, 1, 1]);
+        this.mMsg.getXform().setPosition(11, -5);
         this.mMsg.setTextHeight(3);
 
         this.mCollide = this.mHero;
@@ -75,6 +82,8 @@ class ReplayGame extends engine.Scene {
         this.mRecorderManager.setMaxLengthInSeconds(4);
         this.mRecorderManager.start();
 
+        
+
     }
 
     // This is the draw function, make sure to setup proper drawing environment, and more
@@ -85,6 +94,9 @@ class ReplayGame extends engine.Scene {
 
         // Step  B: Activate the drawing Camera
         this.mCamera.setViewAndCameraMatrix();
+
+        // Step  B.5: Draw background
+        this.mSimpsonBackground.draw(this.mCamera);
 
         // Step  C: Draw everything
         this.mHero.draw(this.mCamera);
@@ -120,7 +132,7 @@ class ReplayGame extends engine.Scene {
             this.mDyePackSet.addToSet(temp);
         }
 
-        this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + " Player Two Health: " + this.mPortal.getHealth());
+        this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + "    Player Two Health: " + this.mPortal.getHealth());
     }
 
     DyePackCleanUp() {
