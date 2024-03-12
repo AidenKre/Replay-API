@@ -13,6 +13,10 @@ class PlaybackManager {
         this.mPauseModifier = 1.0;
         this.mIsReverse;
         this.mIsLooping = false;
+        this.mMasterList = [];
+        this.mDynamicSet = [];
+        this.mDynamicRecording = [];
+        this.mTempDynamicList = new engine.GameObjectSet();
     }
 
     setSpeed(speed) {
@@ -53,12 +57,15 @@ class PlaybackManager {
         //check if using JSON
         if (dontUseJSON) {
             this.mRecording = this.mRecorderManager.getRecording();
+            this.mDynamicRecording = this.mRecorderManager.getDynamicRecording();
+            let temp = this.mRecorderManager.getMasterDynamicSet()
+            this.mMasterList = temp.MasterList;
+            this.mDynamicSet = temp.DynamicSet;
         } else {
             this.mRecording = this.mJSONRecording;
         }
         this.mLastElement = this.mRecording.length;
         this.mIsPlaying = true;
-        this.mRecorderManager.printArray();
     }
 
     pause()
@@ -75,6 +82,7 @@ class PlaybackManager {
         if (this.mIsPlaying) {
             if (this.isWithinBounds()) {
                 let index = Math.floor(this.mIndex);
+                this.dynamicUpdate(index);
                 for (let i = 0; i < this.mRecording[index].length; i++) {
                     this.mGameObjectSet.getObjectAt(i).deserialize(this.mRecording[index][i]);
                 }
@@ -96,6 +104,19 @@ class PlaybackManager {
         }
     }
 
+    dynamicUpdate(index)
+    {
+        for(let i = 0; i < this.mMasterList.length; i++)
+        {
+            for(let j = 0; j < this.mDynamicRecording[index][i].length; j++)
+            {
+                let temp = this.mMasterList[i].spawn();
+                temp.deserialize(this.mDynamicRecording[index][i][j]);
+                this.mTempDynamicList.addToSet(temp);
+            }
+        }
+    }
+
     IsPlaying()
     {
         return this.mIsPlaying;
@@ -110,7 +131,12 @@ class PlaybackManager {
     }
 
     draw(Camera) {
-        if (this.mIsPlaying) this.mGameObjectSet.draw(Camera);
+        if (this.mIsPlaying) 
+        {
+            this.mGameObjectSet.draw(Camera);
+            this.mTempDynamicList.draw(Camera);
+            this.mTempDynamicList = new engine.GameObjectSet();
+        }
     }
 
     loadFromJSON(filepath) {

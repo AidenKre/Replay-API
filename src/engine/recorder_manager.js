@@ -12,6 +12,10 @@ class RecorderManager
         {
         this.ListenTo(GameObjectSet);
         }
+
+        this.mMasterList = [];
+        this.mDynamicSet = [];
+        this.mDynamicRecording = [];
     }
 
     ListenTo(object)
@@ -34,6 +38,12 @@ class RecorderManager
         }
     }
 
+    DynamicListenTo(Master, GameObjectSet)
+    {
+        this.mMasterList.push(Master);
+        this.mDynamicSet.push(GameObjectSet);
+    }
+
 /*    init()
     {
         for(let i = 0; i < this.mGameObjectSet.size(); i++)
@@ -46,20 +56,42 @@ class RecorderManager
     {
         if(this.mIsRecording) 
         {
+            this.staticUpdate();
+            this.dynamicUpdate();
+            if(this.mMaxRecordingLength > 0)
+        {
+            if(this.mRecording.length > this.mMaxRecordingLength)
+            {
+                this.mRecording.shift();
+                this.mDynamicRecording.shift();
+            }
+        }
+        }
+    }
+
+    staticUpdate()
+    {
         let frameList = [];
         for(let i = 0; i < this.mGameObjectSet.size(); i++)
         {
             frameList.push(this.mGameObjectSet.getObjectAt(i).serialize());
         }
         this.mRecording.push(frameList);
-        if(this.mMaxRecordingLength > 0)
+    }
+
+    dynamicUpdate()
+    {
+        let wholeList = []
+        for(let i = 0; i < this.mMasterList.length; i++)
         {
-            if(this.mRecording.length > this.mMaxRecordingLength)
+            let frameList = [];
+            for(let j = 0; j < this.mDynamicSet[i].size(); j++)
             {
-                this.mRecording.shift();
+                frameList.push(this.mDynamicSet[i].getObjectAt(j).serialize());
             }
+        wholeList.push(frameList);
         }
-        }
+        this.mDynamicRecording.push(wholeList);
     }
 
     start()
@@ -76,6 +108,7 @@ class RecorderManager
         }
         this.mIsRecording = true;
         this.mRecording = [];
+        this.mDynamicRecording = [];
     }
 
     stop()
@@ -96,6 +129,11 @@ class RecorderManager
     getRecording()
     {
         return this.mRecording;
+    }
+
+    getDynamicRecording()
+    {
+        return this.mDynamicRecording;
     }
 
     saveToJSON()
@@ -126,9 +164,18 @@ class RecorderManager
         return this.mGameObjectSet;
     }
 
+    getMasterDynamicSet()
+    {
+        return {
+            MasterList: this.mMasterList,
+            DynamicSet: this.mDynamicSet
+        }
+    }
+
     printArray()
     {
         console.log(this.mRecording);
+        console.log(this.mDynamicRecording);
     }
 
 }

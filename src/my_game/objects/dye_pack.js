@@ -13,6 +13,8 @@ class DyePack extends engine.GameObjectRenderable {
         this.kLifeSpan = 500;
         this.kSpawnTime = performance.now();
 
+        this.kSpriteTexture = spriteTexture;
+
         this.mReadyToDie = false;
         this.mRenderComponent = new engine.SpriteRenderable(spriteTexture);
         this.mRenderComponent.setColor([1, 1, 1, 0.1]);
@@ -37,6 +39,22 @@ class DyePack extends engine.GameObjectRenderable {
     hit()
     {
         this.mReadyToDie = true;
+    }
+    
+    spawn()
+    {   
+
+        return new DyePack(this.kSpriteTexture);
+    }
+    
+    serialize()
+    {
+        return super.serialize()
+    }
+
+    deserialize(data)
+    {
+        super.deserialize(data);
     }
 }
 

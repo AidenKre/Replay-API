@@ -63,6 +63,8 @@ class ReplayGame extends engine.Scene {
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
         this.mSimpsonBackground = new TextureObject(this.kSimpsonSprite, 50, 37.5, 100, 100);
 
+        this.mMasterDyePack = new DyePack(this.kMinionSprite);
+
         this.mMsg = new engine.FontRenderable("Status Message");
         this.mMsg.setColor([1, 1, 1, 1]);
         this.mMsg.getXform().setPosition(11, -5);
@@ -81,6 +83,8 @@ class ReplayGame extends engine.Scene {
 
         this.mRecorderManager.setMaxLengthInSeconds(4);
         this.mRecorderManager.start();
+
+        this.mRecorderManager.DynamicListenTo(this.mMasterDyePack, this.mDyePackSet);
 
         
 
@@ -117,7 +121,6 @@ class ReplayGame extends engine.Scene {
         this.DyePackCleanUp();
         this.DyePackCollion();
         this.ResetManagement();
-        console.log(this.IsReadyToReset());
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
             engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
@@ -126,7 +129,7 @@ class ReplayGame extends engine.Scene {
         }
 
         if (engine.input.isKeyClicked(engine.input.keys.Space)) {
-            let temp = new DyePack(this.kMinionSprite);
+            let temp = this.mMasterDyePack.spawn();
             let pos = this.mHero.getXform().getPosition();
             temp.getXform().setPosition(pos[0], pos[1]);
             this.mDyePackSet.addToSet(temp);
