@@ -106,8 +106,9 @@ class ReplayGame extends engine.Scene {
         this.mHero.draw(this.mCamera);
         this.mPortal.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
-        this.mPlaybackManager.draw(this.mCamera);
         this.mDyePackSet.draw(this.mCamera);
+
+        this.mPlaybackManager.draw(this.mCamera);
     }
 
     // The update function, updates the application state. Make sure to _NOT_ draw
