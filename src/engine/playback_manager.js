@@ -88,6 +88,11 @@ class PlaybackManager {
         }
     }
 
+    IsPlaying()
+    {
+        return this.mIsPlaying;
+    }
+
     isWithinBounds() {
         if (this.mIsReverse) {
             return this.mIndex > 0;

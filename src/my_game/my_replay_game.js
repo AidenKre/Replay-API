@@ -21,8 +21,9 @@ class ReplayGame extends engine.Scene {
 
         // the hero and the support objects
         this.mHero = null;
-
         this.mPortal = null;
+
+        this.mDyePackSet;
 
         this.mRecorderManager = null;
         this.mPlaybackManager = null;
@@ -31,6 +32,8 @@ class ReplayGame extends engine.Scene {
         this.mIsRecording = null;
         this.mIsPlaying = null;
         this.mIsRecordingPresent = null;
+
+        this.mPortalDead = null;
     }
 
     load() {
@@ -54,8 +57,6 @@ class ReplayGame extends engine.Scene {
         // sets the background to gray
         this.mHero = new Hero(this.kMinionSprite);
         this.mBrain = new Brain(this.kMinionSprite);
-
-
         this.mPortal = new TextureObject(this.kMinionPortal, 50, 30, 10, 10);
 
         this.mMsg = new engine.FontRenderable("Status Message");
@@ -64,6 +65,8 @@ class ReplayGame extends engine.Scene {
         this.mMsg.setTextHeight(3);
 
         this.mCollide = this.mHero;
+
+        this.mDyePackSet = new engine.GameObjectSet();
 
         this.mRecordingSet = new engine.GameObjectSet();
         this.mRecordingSet.addToSet(this.mHero);
@@ -92,15 +95,19 @@ class ReplayGame extends engine.Scene {
         this.mPortal.draw(this.mCamera);
         this.mMsg.draw(this.mCamera);
         this.mPlaybackManager.draw(this.mCamera);
+        this.mDyePackSet.draw(this.mCamera);
     }
 
     // The update function, updates the application state. Make sure to _NOT_ draw
     // anything from this function!
     update() {
+
         this.mPlaybackManager.update();
         this.mRecorderManager.update();
         this.mHero.update();
-
+        this.mDyePackSet.update();
+        this.DyePackCleanUp();
+        this.DyePackCollion();
         this.mPortal.update(engine.input.keys.Up, engine.input.keys.Down,
             engine.input.keys.Left, engine.input.keys.Right, engine.input.keys.Z);
 
@@ -136,7 +143,48 @@ class ReplayGame extends engine.Scene {
                 this.mPlaybackManager.setSpeed(this.mPlaybackSpeed);
             }
 
+            if(engine.input.isKeyClicked(engine.input.keys.Space))
+            {
+                let temp = new DyePack(this.kMinionSprite);
+                let pos = this.mHero.getXform().getPosition();
+                temp.getXform().setPosition(pos[0], pos[1]);
+                this.mDyePackSet.addToSet(temp);
+            }
+
         this.mMsg.setText("Player One Health: " + this.mHero.getHealth() + " Player Two Health: " + this.mPortal.getHealth());
+    }
+
+    DyePackCleanUp()
+    {
+        for(let i = 0; i < this.mDyePackSet.size(); i++)
+        {
+            let temp = this.mDyePackSet.getObjectAt(i);
+            if(temp.ReadyToDie())
+            {
+                this.mDyePackSet.removeFromSet(temp);
+            }
+            
+        }
+    }
+
+    DyePackCollion()
+    {
+        for(let i = 0; i < this.mDyePackSet.size(); i++)
+        {
+            let pos = [0,0];
+            let temp = this.mDyePackSet.getObjectAt(i);
+            if(temp.pixelTouches(this.mPortal, pos))
+            {
+                temp.hit();
+               this.mPortalDead =  this.mPortal.hit();
+            }
+            
+        }
+    }
+
+    PortalDied()
+    {
+        return 
     }
 }
 

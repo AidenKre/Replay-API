@@ -10,6 +10,10 @@ class DyePack extends engine.GameObjectRenderable {
         this.kRefHeight = 130;
         this.kDelta = 0.5;
 
+        this.kLifeSpan = 500;
+        this.kSpawnTime = performance.now();
+
+        this.mReadyToDie = false;
         this.mRenderComponent = new engine.SpriteRenderable(spriteTexture);
         this.mRenderComponent.setColor([1, 1, 1, 0.1]);
         this.mRenderComponent.getXform().setPosition(50, 33);
@@ -18,23 +22,21 @@ class DyePack extends engine.GameObjectRenderable {
     }
 
     update() {
-        let xform = this.getXform();
-        if (engine.input.isKeyPressed(engine.input.keys.Up)) {
-            xform.incYPosBy(this.kDelta);
+        if(performance.now() - this.kSpawnTime > this.kLifeSpan)
+        {
+            this.mReadyToDie = true;
         }
-        if (engine.input.isKeyPressed(engine.input.keys.Down)) {
-            xform.incYPosBy(-this.kDelta);
-        }
-        if (engine.input.isKeyPressed(engine.input.keys.Left)) {
-            xform.incXPosBy(-this.kDelta);
-        }
-        if (engine.input.isKeyPressed(engine.input.keys.Right)) {
-            xform.incXPosBy(this.kDelta);
-        }
+        this.getXform().incXPosBy(2);
+    }
 
-        if (this.isVisible()) {
-            xform.incYPosBy(-this.kDelta);
-        }
+    ReadyToDie()
+    {
+        return this.mReadyToDie;
+    }
+
+    hit()
+    {
+        this.mReadyToDie = true;
     }
 }
 
