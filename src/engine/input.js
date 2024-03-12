@@ -19,6 +19,10 @@ const keys = {
     // space bar
     Space: 32,
 
+    // Symbols
+    Plus : 43,
+    Minus : 45,
+
     // numbers 
     Zero: 48,
     One: 49,

@@ -12,6 +12,7 @@ class PlaybackManager {
         this.mPlaybackSpeed = 1.0;
         this.mPauseModifier = 1.0;
         this.mIsReverse;
+        this.mIsLooping = false;
     }
 
     setSpeed(speed) {
@@ -32,10 +33,6 @@ class PlaybackManager {
         if(this.mPauseModifier == 0)
         {
             this.mPauseModifier = 1;
-            return;
-        }
-        if (Math.abs(this.mPlaybackSpeed) < Number.EPSILON) {
-            console.log("Playback speed cannot be 0");
             return;
         }
         //check if reversing
@@ -61,6 +58,11 @@ class PlaybackManager {
         this.mPauseModifier = 0;
     }
 
+    loop()
+    {
+        this.mIsLooping = !this.mIsLooping;
+    }
+
     update() {
         if (this.mIsPlaying) {
             if (this.isWithinBounds()) {
@@ -70,9 +72,25 @@ class PlaybackManager {
                 }
                 this.mIndex += this.mPlaybackSpeed * this.mPauseModifier;
             } else {
+                if(this.mIsLooping)
+                {
+                    if(this.mIndex <= 0)
+                    {
+                        this.mIndex = this.mLastElement - 1;
+                    } else
+                    {
+                        this.mIndex = 0;
+                    }
+                    return;
+                }
                 this.mIsPlaying = false;
             }
         }
+    }
+
+    IsPlaying()
+    {
+        return this.mIsPlaying;
     }
 
     isWithinBounds() {
