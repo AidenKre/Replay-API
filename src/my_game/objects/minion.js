@@ -2,7 +2,7 @@
 
 import engine from "../../engine/index.js";
 
-class Minion extends engine.GameObjectRenderable {
+class Minion extends engine.GameObjectRecordable {
     constructor(spriteTexture, atX, atY) {
         super(null);
         this.kDelta = 0.2;

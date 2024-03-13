@@ -2,7 +2,7 @@
 
 import engine from "../../engine/index.js";
 
-class Hero extends engine.GameObjectRenderable {
+class Hero extends engine.GameObjectRecordable {
     constructor(spriteTexture) {
         super(null);
         this.kDelta = 0.3;

@@ -36,7 +36,7 @@ import { eAnimationType } from "./renderables/sprite_animate_renderable.js";
 
 // game objects
 import GameObject from "./game_objects/game_object.js";
-import GameObjectRenderable from "./game_objects/game_object_recordable.js";
+import GameObjectRecordable from "./game_objects/game_object_recordable.js";
 import GameObjectSet from "./game_objects/game_object_set.js";
 
 //recording api
@@ -90,7 +90,7 @@ export default {
     Renderable, TextureRenderable, SpriteRenderable, SpriteAnimateRenderable, FontRenderable,
 
     // Game Objects
-    GameObject, GameObjectRenderable, GameObjectSet,
+    GameObject, GameObjectRecordable, GameObjectSet,
 
     // constants
     eTexCoordArrayIndex, eAnimationType, eBoundCollideStatus,

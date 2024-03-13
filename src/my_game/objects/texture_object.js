@@ -2,7 +2,7 @@
 
 import engine from "../../engine/index.js";
 
-class TextureObject extends engine.GameObjectRenderable {
+class TextureObject extends engine.GameObjectRecordable {
     constructor(texture, x, y, w, h) {
         super(null);
         this.kDelta = 0.2;

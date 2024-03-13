@@ -2,7 +2,7 @@
 
 import engine from "../../engine/index.js";
 
-class Brain extends engine.GameObjectRenderable {
+class Brain extends engine.GameObjectRecordable {
     constructor(spriteTexture) {
         super(null);
         this.kDeltaDegree = 1;
